@@ -41,7 +41,7 @@ class AddFilm extends Component {
   };
 
   render() {
-    const { title, release_date, tmdb_id } = this.state;
+    const { title, release_date, tmdb_id } = this.state; // eslint-disable-line
     return (
       <Mutation mutation={ADD_FILM_MUTATION} variables={this.state}>
         {(addFilm, { loading, error }) => (
