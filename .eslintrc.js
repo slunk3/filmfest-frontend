@@ -62,7 +62,13 @@ module.exports = {
                 "props": false
             }
         ],
-        "no-console": 0,
+        "no-console": 1,
+        "camelcase": [
+          1,
+          {
+            "ignoreDestructuring": true 
+          }
+        ],
         "import/prefer-default-export": 0,
         "import": 0,
         "func-names": 0,
