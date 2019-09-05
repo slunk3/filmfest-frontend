@@ -11,7 +11,7 @@ const ADD_FILM_MUTATION = gql`
   mutation ADD_FILM_MUTATION(
     $title: String!
     $release_date: String
-    $tmdb_id: String
+    $tmdb_id: Int!
   ) {
     addFilm(title: $title, release_date: $release_date, tmdb_id: $tmdb_id) {
       id
@@ -22,8 +22,8 @@ const ADD_FILM_MUTATION = gql`
 class AddFilm extends Component {
   state = {
     title: '',
-    releaseDate: '',
-    tmdbId: '',
+    release_date: '',
+    tmdb_id: '',
     overview: '',
     films: [],
   };
@@ -53,15 +53,22 @@ class AddFilm extends Component {
   populateForm = item => {
     this.setState({
       title: item.title,
-      releaseDate: item.release_date,
-      tmdbId: item.id,
+      release_date: item.release_date,
+      tmdb_id: item.id,
       posterPath: item.poster_path,
       overview: item.overview,
     });
   };
 
   render() {
-    const { title, releaseDate, tmdbId, overview, posterPath, films } = this.state; // eslint-disable-line
+    const {
+      title,
+      release_date,
+      tmdb_id,
+      overview,
+      posterPath,
+      films,
+    } = this.state;
     return (
       <Mutation mutation={ADD_FILM_MUTATION} variables={this.state}>
         {(addFilm, { loading, error }) => (
@@ -121,37 +128,37 @@ class AddFilm extends Component {
               }}
             >
               <fieldset>
-                <label htmlFor="film-title">
+                <label htmlFor="title">
                   Title{' '}
                   <input
                     type="text"
-                    name="film-title"
-                    id="film-title"
+                    name="title"
+                    id="title"
                     value={title}
                     readOnly
                   />
                 </label>
               </fieldset>
               <fieldset>
-                <label htmlFor="film-id">
+                <label htmlFor="tmdb_id">
                   TMDB ID{' '}
                   <input
                     type="text"
-                    name="film-id"
-                    id="film-id"
-                    value={tmdbId}
+                    name="tmdb_id"
+                    id="tmdb_id"
+                    value={tmdb_id}
                     readOnly
                   />
                 </label>
               </fieldset>
               <fieldset>
-                <label htmlFor="film-id">
+                <label htmlFor="release_date">
                   Release Date{' '}
                   <input
                     type="text"
-                    name="film-id"
-                    id="film-id"
-                    value={releaseDate}
+                    name="release_date"
+                    id="release_date"
+                    value={release_date}
                     readOnly
                   />
                 </label>
@@ -165,6 +172,8 @@ class AddFilm extends Component {
                   />
                 )}
               </div>
+              {/* TODO: Submit film to DB on selection */}
+              <button type="submit">Add film</button>
             </form>
           </>
         )}
