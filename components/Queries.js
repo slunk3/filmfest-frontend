@@ -6,6 +6,8 @@ const ALL_FILMS_QUERY = gql`
     films {
       id
       title
+      release_date
+      tmdb_id
     }
   }
 `;

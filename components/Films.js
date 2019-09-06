@@ -18,9 +18,13 @@ class Films extends Component {
             return (
               <div>
                 <AddFilm />
-                {data.films.map(film => (
-                  <Film film={film} key={film.id} />
-                ))}
+                <ol>
+                  {data.films.map(film => (
+                    <li>
+                      <Film film={film} key={film.tmdb_id} />
+                    </li>
+                  ))}
+                </ol>
               </div>
             );
           }}

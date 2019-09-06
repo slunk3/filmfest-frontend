@@ -13,7 +13,7 @@ class Film extends Component {
       <div>
         <Link href={{ pathname: '/film', query: { id: film.id } }}>
           <a>
-            {film.title} || #{film.id}
+            {film.title} ({film.release_date.split('-')[0]})
           </a>
         </Link>
       </div>

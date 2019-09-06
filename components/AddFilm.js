@@ -6,6 +6,7 @@ import DownShift from 'downshift';
 import debounce from 'lodash.debounce';
 import Error from './ErrorMessage';
 import { DropDown, DropDownItem, SearchStyles } from './styles/DropDown';
+import { ALL_FILMS_QUERY } from './Queries';
 
 const ADD_FILM_MUTATION = gql`
   mutation ADD_FILM_MUTATION(
@@ -26,6 +27,7 @@ class AddFilm extends Component {
     tmdb_id: '',
     overview: '',
     films: [],
+    isAdded: false,
   };
 
   findFilm = debounce(async e => {
@@ -68,9 +70,14 @@ class AddFilm extends Component {
       overview,
       posterPath,
       films,
+      isAdded,
     } = this.state;
     return (
-      <Mutation mutation={ADD_FILM_MUTATION} variables={this.state}>
+      <Mutation
+        mutation={ADD_FILM_MUTATION}
+        variables={this.state}
+        refetchQueries={[{ query: ALL_FILMS_QUERY }]}
+      >
         {(addFilm, { loading, error }) => (
           <>
             <Error error={error} />
@@ -97,6 +104,11 @@ class AddFilm extends Component {
                         onChange: e => {
                           e.persist();
                           this.findFilm(e);
+                        },
+                        onFocus: e => {
+                          this.setState({
+                            isAdded: false,
+                          });
                         },
                       })}
                     />
@@ -125,9 +137,17 @@ class AddFilm extends Component {
               onSubmit={async e => {
                 e.preventDefault();
                 const res = await addFilm();
+                this.setState({
+                  isAdded: true,
+                });
               }}
             >
               <fieldset>
+                {/* TODO: Submit film to DB on selection */}
+                <div>
+                  {isAdded && <p>Film added!</p>}
+                  <button type="submit">Add film</button>
+                </div>
                 <label htmlFor="title">
                   Title{' '}
                   <input
@@ -164,16 +184,16 @@ class AddFilm extends Component {
                 </label>
               </fieldset>
               <div>
-                <p>{overview}</p>
+                {overview && <small>{overview}</small>}
                 {posterPath && (
-                  <img
-                    src={`//image.tmdb.org/t/p/w185_and_h278_bestv2/${posterPath}`}
-                    alt={title}
-                  />
+                  <div>
+                    <img
+                      src={`//image.tmdb.org/t/p/w185_and_h278_bestv2/${posterPath}`}
+                      alt={title}
+                    />
+                  </div>
                 )}
               </div>
-              {/* TODO: Submit film to DB on selection */}
-              <button type="submit">Add film</button>
             </form>
           </>
         )}
